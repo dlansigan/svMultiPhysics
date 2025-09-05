@@ -107,20 +107,20 @@
       <Impose_flux> true </Impose_flux> 
       <!-- <Type> Neu </Type>  -->
       <!-- <Value> 5.0e4 </Value>  -->
-      <Value> 10 </Value> 
+      <Value> -100 </Value> 
    </Add_BC> 
 
    <Add_BC name="lumen_outlet" > 
       <Type> Neu </Type> 
-      <!-- <Time_dependence> RCR </Time_dependence> 
+      <Time_dependence> RCR </Time_dependence> 
       <RCR_values> 
         <Capacitance> 1.5e-5 </Capacitance> 
         <Distal_resistance> 1212 </Distal_resistance> 
         <Proximal_resistance> 121 </Proximal_resistance> 
         <Distal_pressure> 0 </Distal_pressure> 
         <Initial_pressure> 0 </Initial_pressure> 
-      </RCR_values>  -->
-      <Value> 0. </Value> 
+      </RCR_values> 
+      <!-- <Value> 0. </Value>  -->
    </Add_BC> 
 
    <Add_BC name="lumen_wall" > 

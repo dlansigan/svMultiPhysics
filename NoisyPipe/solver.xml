@@ -12,20 +12,20 @@
   <Name_prefix_of_saved_VTK_files> result </Name_prefix_of_saved_VTK_files> 
   <Increment_in_saving_VTK_files> 1 </Increment_in_saving_VTK_files> 
   <Start_saving_after_time_step> 1 </Start_saving_after_time_step> 
-  <Increment_in_saving_restart_files> 1 </Increment_in_saving_restart_files> 
+  <Increment_in_saving_restart_files> 10 </Increment_in_saving_restart_files> 
   <Convert_BIN_to_VTK_format> 0 </Convert_BIN_to_VTK_format> 
   <Verbose> 1 </Verbose> 
   <Warning> 0 </Warning> 
-  <Debug> 0 </Debug> 
+  <Debug> 1 </Debug> 
 </GeneralSimulationParameters>
 
 <Add_mesh name="lumen" > 
-  <Mesh_file_path> mesh/fluid/mesh-complete.mesh.vtu  </Mesh_file_path>
+  <Mesh_file_path> mesh/fluid/mesh-complete.vtu  </Mesh_file_path>
   <Add_face name="lumen_inlet">
-      <Face_file_path> mesh/fluid/mesh-surfaces/start.vtp </Face_file_path>
+      <Face_file_path> mesh/fluid/mesh-surfaces/inlet.vtp </Face_file_path>
   </Add_face>
   <Add_face name="lumen_outlet">
-      <Face_file_path> mesh/fluid/mesh-surfaces/end.vtp </Face_file_path>
+      <Face_file_path> mesh/fluid/mesh-surfaces/outlet.vtp </Face_file_path>
   </Add_face>
   <Add_face name="lumen_wall">
       <Face_file_path> mesh/fluid/mesh-surfaces/interface.vtp </Face_file_path>
@@ -35,12 +35,12 @@
 </Add_mesh>
 
 <Add_mesh name="wall" >
-  <Mesh_file_path> mesh/solid/mesh-complete.mesh.vtu  </Mesh_file_path>
+  <Mesh_file_path> mesh/solid/mesh-complete.vtu  </Mesh_file_path>
   <Add_face name="wall_inlet">
-      <Face_file_path> mesh/solid/mesh-surfaces/start.vtp </Face_file_path>
+      <Face_file_path> mesh/solid/mesh-surfaces/inlet.vtp </Face_file_path>
   </Add_face>
   <Add_face name="wall_outlet">
-      <Face_file_path> mesh/solid/mesh-surfaces/end.vtp </Face_file_path>
+      <Face_file_path> mesh/solid/mesh-surfaces/outlet.vtp </Face_file_path>
   </Add_face>
   <Add_face name="wall_inner">
       <Face_file_path> mesh/solid/mesh-surfaces/interface.vtp </Face_file_path>
@@ -109,7 +109,7 @@
       <Value> 0.0 </Value> 
       <Impose_on_state_variable_integral> true </Impose_on_state_variable_integral> 
       <Zero_out_perimeter> false </Zero_out_perimeter> 
-      <Effective_direction> (0, 0, 1) </Effective_direction> 
+      <Effective_direction> (1, 0, 0) </Effective_direction> 
    </Add_BC> 
 
    <Add_BC name="wall_outlet" >
@@ -117,7 +117,7 @@
       <Value> 0.0 </Value> 
       <Impose_on_state_variable_integral> true </Impose_on_state_variable_integral>
       <Zero_out_perimeter> false </Zero_out_perimeter> 
-      <Effective_direction> (0, 0, 1 ) </Effective_direction> 
+      <Effective_direction> (1, 0, 0 ) </Effective_direction> 
    </Add_BC> 
 
 </Add_equation>

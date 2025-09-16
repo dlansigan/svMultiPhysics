@@ -28,15 +28,17 @@ def animate_result(filepath, pref, cam='xz'):
         # Create a new plotter for each scalar, store in dictionary
         pl_dict[scalar] = pv.Plotter(notebook=False, off_screen=True)
         pl_dict[scalar].open_gif(filepath + f'{scalar}.gif')
+    pl_dict['Streamlines'] = pv.Plotter(notebook=False, off_screen=True)
+    pl_dict['Streamlines'].open_gif(filepath + f'streamlines.gif')
     clim_dict = {
-        'Pressure': [0, 3e5],
+        'Pressure': [16e3, 17e3],
         'Divergence': [-1e-3, 1e-3],
-        'magU': [0, 300],
-        'u': [0, 100], #80
-        'v': [0, 100],
-        'w': [0, 100],
-        'magW': [0, 5000], # 200
-        'magWSS': [0, 100] # 20
+        'magU': [0, 20],
+        'u': [0, 20], #80
+        'v': [0, 20],
+        'w': [0, 20],
+        'magW': [0, 50], # 200
+        'magWSS': [0, 20] # 20
     }
     clip_dict = {
         'Pressure': True,
@@ -48,6 +50,19 @@ def animate_result(filepath, pref, cam='xz'):
         'magW': True,
         'magWSS': False
     }
+
+    # Define streamlines source
+    fluid = pv.read(filepath+'geom/fluid.vtp') # Load fluid geometry
+    markers = fluid.cell_data["marker"]
+    mask = markers == 0
+    cell_ids = np.where(mask)[0]
+    inlet = fluid.extract_cells(cell_ids) # Extract inlet face
+    source_center = inlet.points.mean(axis=0) # Centroid of inlet
+    vecs = np.random.normal(size=(100, 3))
+    vecs /= np.linalg.norm(vecs, axis=1)[:, None]   # normalize
+    radii = 0.8 * np.random.rand(100) ** (1/3)  # scale radius correctly
+    source_ball = source_center + vecs * radii[:, None]
+    source = pv.PolyData(source_ball)
 
     # Make and save frames to gif
     for filename in vtu_files:
@@ -106,9 +121,25 @@ def animate_result(filepath, pref, cam='xz'):
             pl.add_text(f"Time step: {filename}", font_size=10)  
             pl.write_frame()
 
+        # Streamlines
+        boundary = mesh_def.decimate_boundary().extract_all_edges()
+        mesh_def.set_active_vectors('Velocity')
+        mesh_def.set_active_scalars('Velocity')
+        streamlines = mesh_def.streamlines_from_source(source, vectors="Velocity", integration_direction='forward')
+        pl = pl_dict['Streamlines']
+        pl.clear() # Clear previous frame
+        pl.add_mesh(boundary,opacity=0.3)
+        pl.add_mesh(streamlines.tube(radius=0.01),cmap='viridis',clim=clim_dict['magU'])
+        pl.add_points(np.array(source_center),color='red')
+        pl.camera_position = 'xz'
+        pl.add_axes(interactive=True)
+        pl.add_text(f"Time step: {filename}", font_size=10)  
+        pl.write_frame()
+        
     # Close plotters
     for scalar in scalar_names:
         pl_dict[scalar].close()
+    pl_dict['Streamlines'].close()
 
 if __name__ == "__main__":
     # Parse command line arguments

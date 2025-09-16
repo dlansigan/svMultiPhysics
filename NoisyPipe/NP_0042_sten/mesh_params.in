@@ -7,29 +7,37 @@ Input file for generate_noisy_pipe.py.
 10.0
 # WALL THICKNESS
 0.2
-# NUMBER OF MODES - number of modes for noise
-4
-# KMIN - minimum wavenumber for noise
+# NOISE: NUMBER OF MODES - number of modes for noise
+0
+# NOISE: KMIN - minimum wavenumber for noise
 2
-# KMAX - maximum wavenumber for noise
+# NOISE: KMAX - maximum wavenumber for noise
 8
-# AMIN - minimum amplitude for noise
+# NOISE: AMIN - minimum amplitude for noise
 -0.1
-# AMAX - maximum amplitude for noise
+# NOISE: AMAX - maximum amplitude for noise
 0.1
-# STENOSIS WIDTH
-0.5
-# STENOSIS HEIGHT
-0.3
-# STENOSIS LOCATION
--1.0
+# STENOSIS: WIDTH
+1.
+# STENOSIS: HEIGHT
+0.25
+# STENOSIS: LOCATION
+0.
 # N_ARES - angular resolution
-64
+100
 # N_BASE - number of base contours along height
-32
+50
 # N_XRES  - final x resolution
 100
+# BL: N_LAYERS - number of BL layers
+2
+# BL: GROWTH RATIO - rate at which layers increase in size moving away from wall
+1.3
+# BL: FIRST LAYER HEIGHT - height of the first BL layer
+0.02
+# GLOBAL: MAX_VOL - max volume for each region (fluid, solid, BL layers), separated by space
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01
 # RANDOM SEED
-42
+0
 # TETGEN SWITCHES
-pzq1.2Aa0.1f
+pzq1.2Aa0.01f

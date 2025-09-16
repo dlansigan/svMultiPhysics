@@ -56,5 +56,5 @@ cd $case_dir
 python $SIM_HOME/generate_noisy_pipe.py --input mesh_params.in > mesh.log
 
 # Run simulation
-mpiexec -n 4 svmultiphysics solver.xml > solver.log &
-echo "Running job at PID: $!"
+mpiexec -n 4 svmultiphysics solver.xml > solver.log 
+# echo "Running job at PID: $!"

@@ -1,0 +1,4 @@
+Copied template files:
+--solver_temp.xml -> NP_0042/solver.xml
+--lumen_inlet_temp.flow -> NP_0042/lumen_inlet.flow
+--mesh_params_temp.in -> NP_0042/mesh_params.in

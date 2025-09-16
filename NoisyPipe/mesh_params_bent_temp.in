@@ -26,7 +26,7 @@ Input file for generate_noisy_pipe.py.
 # SPLINE N_SPLINE: number of points for spline
 5
 # SPLINE BOUNDS: bounds for spline points (xmin, xmax, ymin, ymax, zmin, zmax)
--5 5 0 0 0 0
+-5 5 -3 3 -1 1
 # N_ARES - angular resolution
 100
 # N_BASE - number of base contours along height

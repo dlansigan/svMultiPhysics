@@ -4,5 +4,5 @@ end=$2
 for case in $(seq $start $end)
 do
     echo $case
-    ./run_case.sh $case
+    ./vis_case.sh $case
 done

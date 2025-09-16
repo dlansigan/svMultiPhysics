@@ -1,52 +1,57 @@
-Generated geometry.
+Generating geometry...
 -- Fluid manifold? True
--- Solid manifold? True
+Done generating geometry.
 Saved geometry files.
 
-Generated mesh with 18050 nodes and 94246 elements.
+Generated mesh with 25641 nodes and 122217 elements.
 Saved mesh files. Done!
 
+Warning:  Unknown switch -
+.
 Delaunizing vertices...
-Delaunay seconds:  0.035324
+Delaunay seconds:  0.024642
 Creating surface mesh ...
-Surface mesh seconds:  0.009977
+Surface mesh seconds:  0.007416
 Recovering boundaries...
-Boundary recovery seconds:  0.021809
+Boundary recovery seconds:  0.015969
 Removing exterior tetrahedra ...
 Spreading region attributes.
-Exterior tets removal seconds:  0.008533
+Exterior tets removal seconds:  0.009509
 Recovering Delaunayness...
-Delaunay recovery seconds:  0.017389
+Delaunay recovery seconds:  0.009505
 Refining mesh...
-Refinement seconds:  0.145027
+  13330 insertions, added 9434 points, 363903 tetrahedra in queue.
+  4438 insertions, added 2792 points, 401980 tetrahedra in queue.
+  5916 insertions, added 2374 points, 325586 tetrahedra in queue.
+Refinement seconds:  0.281366
 Smoothing vertices...
-Mesh smoothing seconds:  0.100491
+Mesh smoothing seconds:  0.280827
 Improving mesh...
-Mesh improvement seconds:  0.017136
+Mesh improvement seconds:  0.021331
 
 Writing nodes.
 Writing elements.
 Writing faces.
 Writing edges.
 
-Output seconds:  0.005083
-Total running seconds:  0.361185
+Output seconds:  0.006154
+Total running seconds:  0.657091
 
 Statistics:
 
-  Input points: 12800
-  Input facets: 25724
-  Input segments: 37518
+  Input points: 10000
+  Input facets: 19996
+  Input segments: 29438
   Input holes: 0
-  Input regions: 2
+  Input regions: 0
 
-  Mesh points: 18050
-  Mesh tetrahedra: 94246
-  Mesh faces: 195197
-  Mesh faces on exterior boundary: 13410
-  Mesh faces on input facets: 26124
-  Mesh edges on input segments: 37543
-  Steiner points on input facets:  175
-  Steiner points on input segments:  25
-  Steiner points inside domain: 5050
+  Mesh points: 25641
+  Mesh tetrahedra: 122217
+  Mesh faces: 255899
+  Mesh faces on exterior boundary: 22930
+  Mesh faces on input facets: 22930
+  Mesh edges on input segments: 30366
+  Steiner points on input facets:  539
+  Steiner points on input segments:  928
+  Steiner points inside domain: 14174
 

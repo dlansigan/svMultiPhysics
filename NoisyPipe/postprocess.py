@@ -6,25 +6,34 @@ import glob
 import natsort
 from einops import rearrange
 
-def make_bbox(size=(-5.5,5.5,-1.5,1.5,-1.5,1.5), dims=(64,32,32)):
+def make_bbox(size=(-5.5,5.5,-1.5,1.5,-1.5,1.5), dims=(200,40,40)):
     # Create bounding box
     bbox = pv.Box(size)
     cell_dimensions = np.array(dims)
     return bbox.voxelize(dimensions=cell_dimensions + 1)
 
+def normalize_coords(bbox):
+    # Normalize into a cube
+    bbox_n = bbox.copy()
+    points = bbox.points
+    max_val = np.max(points,axis=0)
+    min_val = np.min(points,axis=0)
+    bbox_n.points = (points-min_val)/(max_val-min_val) # Normalize to (0,1)
+    return bbox_n
+
 def get_sdf(bbox,mesh):
+
     # Compute implicit distance
-    bbox_d = bbox.compute_implicit_distance(mesh.extract_surface())
-    bbox_d['implicit_distance']*=-1
-    bbox_d = bbox_d.point_data_to_cell_data()
+    bbox_n = bbox.compute_implicit_distance(mesh.extract_surface()) 
+    bbox_n = bbox_n.point_data_to_cell_data()
 
     # Make mask
-    bbox_m = bbox_d.copy()
-    bbox_m.cell_data['mask'] = bbox_d.cell_data['implicit_distance']>0
+    bbox_m = bbox_n.copy() 
+    bbox_m.cell_data['mask'] = bbox_n.cell_data['implicit_distance']>0 # Positive inside
     bbox_m = bbox_m.point_data_to_cell_data()
 
     # Get SDF and mask
-    sdf = bbox_d.cell_data['implicit_distance']
+    sdf = bbox_n.cell_data['implicit_distance'] # Save normalized sdf
     mask = bbox_m.cell_data['mask']
 
     return sdf, mask
@@ -42,8 +51,9 @@ def postproc_data(bbox,mesh,mask):
     data = data.point_data_to_cell_data()
 
     # Set values outside of mesh to dummy value
+    inverse_mask = [not x for x in mask]
     for scalar in ['u','v','w','Pressure']:
-        data.cell_data[scalar][mask] = np.nan
+        data.cell_data[scalar][inverse_mask] = 0.0#np.nan
 
     return data
 
@@ -70,6 +80,8 @@ if __name__ == "__main__":
     # Initialize 
     data = []
     coords = []
+    sdfs = []
+    sdfs_o = []
 
     for case in range(case_start,case_end+1):
         print(case)
@@ -86,17 +98,30 @@ if __name__ == "__main__":
         vtu_files = natsort.natsorted(vtu_files)
         if vtu_files == []:
             raise ValueError(f"No files found with prefix {pref_results} in path {filepath}.")
-        
+
+
+        if case==case_start:
+            # Get bounding box
+            # TODO add code for determining bbox size from mesh params
+            # NOTE: move to time loop if deforming/sampling changes?
+            bbox = make_bbox()
+
+            # Normalize box
+            bbox_n = normalize_coords(bbox)
+
+            # Get coords
+            coords = bbox_n.cell_centers().points
+            np.save(data_path + 'coords.npy',coords)
+            coords_o = bbox.cell_centers().points
+            np.save(data_path + 'coords_o.npy',coords_o)
+            # coords_list.append(bbox.cell_centers().points)
+            
         # Read mesh from first timestep
         mesh = pv.read(vtu_files[0])
 
-        # Get bounding box
-        # TODO add code for determining bbox size from mesh params
-        # NOTE: move to time loop if deforming/sampling changes?
-        bbox = make_bbox()
-
         # Compute SDF, mask
-        sdf, mask = get_sdf(bbox,mesh)
+        sdf, mask = get_sdf(bbox_n,mesh)
+        sdf_o, mask_o = get_sdf(bbox,mesh)
 
         data_list = []
         coords_list = []
@@ -107,33 +132,40 @@ if __name__ == "__main__":
             mesh = pv.read(filename)
 
             # Postprocess data
-            data_t = postproc_data(bbox,mesh,mask)
+            data_t = postproc_data(bbox,mesh,mask_o) # Use non-normalized mesh
 
             # Assemble data array
             data_list.append(np.dstack([data_t.cell_data['u'],
                                 data_t.cell_data['v'],
                                 data_t.cell_data['w'],
                                 data_t.cell_data['Pressure'],
-                                sdf,
-                                mask]))
+                                # sdf,
+                                # mask
+                                ]))
             
-            # Append coords
-            coords_list.append(bbox.cell_centers().points)
 
         # Assemble data array (time N_pts channels)
         data_sim = np.vstack(data_list)
         data.append(data_sim)
-        np.save(data_path + pref + '_' + str(case).zfill(4) + '_data.npy', data_sim)
+        sdfs.append(sdf)
+        sdfs_o.append(sdf_o)
+        # np.save(data_path + pref + '_' + str(case).zfill(4) + '_data.npy', data_sim)
 
-        # Assemble coords array (time N_pts components)
-        coords_sim = np.stack(coords_list)
-        coords.append(coords_sim)
-        np.save(data_path + pref + '_' + str(case).zfill(4) + '_coords.npy', coords_sim)
+    # Assemble coords array (N_pts components)
+    # coords = np.stack(coords_list)
+    # coords.append(coords_sim)
+    # np.save(data_path + pref + '_' + str(case).zfill(4) + '_coords.npy', coords_sim)
 
     # Assemble full arrays 
     data = np.vstack(data) # (N_samp N_pts channels)
-    coords = np.vstack(coords) # (N_samp N components)
+    sdfs = np.stack(sdfs) # (N_geom N_pts)
+    sdfs = np.reshape(sdfs,(case_end-case_start+1,-1,1))
+    sdfs_o = np.stack(sdfs_o) # (N_geom N_pts)
+    sdfs_o = np.reshape(sdfs_o,(case_end-case_start+1,-1,1))
+    # coords = np.vstack(coords) # (N_samp N components)
 
     # Save
-    np.save(data_path + 'coords.npy',coords)
+    # np.save(data_path + 'coords.npy',coords)
     np.save(data_path + 'data.npy',data)
+    np.save(data_path + 'sdf.npy',sdfs)
+    np.save(data_path + 'sdf_o.npy',sdfs_o)

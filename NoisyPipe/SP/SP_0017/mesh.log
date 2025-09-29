@@ -1,0 +1,59 @@
+Generating geometry...
+0.003052714836023255 2.0
+-- Fluid manifold? True
+Done generating geometry.
+Saved geometry files.
+
+Meshing successful.
+Generated mesh with 28161 nodes and 136566 elements.
+Saved mesh files. Done!
+
+Warning:  Unknown switch -
+.
+Delaunizing vertices...
+Delaunay seconds:  0.042883
+Creating surface mesh ...
+Surface mesh seconds:  0.008565
+Recovering boundaries...
+Boundary recovery seconds:  0.021681
+Removing exterior tetrahedra ...
+Spreading region attributes.
+Exterior tets removal seconds:  0.011116
+Recovering Delaunayness...
+Delaunay recovery seconds:  0.015969
+Refining mesh...
+  13330 insertions, added 10950 points, 446575 tetrahedra in queue.
+  4438 insertions, added 3020 points, 476974 tetrahedra in queue.
+  5916 insertions, added 3291 points, 292249 tetrahedra in queue.
+Refinement seconds:  0.266098
+Smoothing vertices...
+Mesh smoothing seconds:  0.310773
+Improving mesh...
+Mesh improvement seconds:  0.024064
+
+Writing nodes.
+Writing elements.
+Writing faces.
+Writing edges.
+
+Output seconds:  0.007589
+Total running seconds:  0.70905
+
+Statistics:
+
+  Input points: 10000
+  Input facets: 19996
+  Input segments: 10100
+  Input holes: 0
+  Input regions: 0
+
+  Mesh points: 28161
+  Mesh tetrahedra: 136566
+  Mesh faces: 285296
+  Mesh faces on exterior boundary: 24328
+  Mesh faces on input facets: 24328
+  Mesh edges on input segments: 11776
+  Steiner points on input facets:  490
+  Steiner points on input segments:  1676
+  Steiner points inside domain: 15995
+

@@ -1,0 +1,47 @@
+==================================================
+Input file for generate_noisy_pipe.py.
+==================================================
+# RADIUS - min, max radius
+1. 1.
+# HEIGHT
+10.0
+# WALL THICKNESS
+0.2
+# NOISE: NUMBER OF MODES - number of modes for noise
+0
+# NOISE: KMIN - minimum wavenumber for noise
+2
+# NOISE: KMAX - maximum wavenumber for noise
+8
+# NOISE: AMIN - minimum amplitude for noise
+-0.1
+# NOISE: AMAX - maximum amplitude for noise
+0.1
+# STENOSIS: WIDTH 
+2.
+# STENOSIS: HEIGHT - absolute max/min height (2*sigma for Gaussian sampling)
+0.25
+# STENOSIS: LOCATION
+0.
+# SPLINE N_SPLINE: number of points for spline
+5
+# SPLINE BOUNDS: bounds for spline points (xmin, xmax, ymin, ymax, zmin, zmax)
+-5 5 0 0 0 0
+# N_ARES - angular resolution
+100
+# N_BASE - number of base contours along height
+20
+# N_XRES  - final x resolution
+100
+# BL: N_LAYERS - number of BL layers
+0
+# BL: GROWTH RATIO - rate at which layers increase in size moving away from wall
+1.3
+# BL: FIRST LAYER HEIGHT - height of the first BL layer
+0.02
+# GLOBAL: MAX_VOL - max volume for each region (fluid, solid, BL layers), separated by space
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01
+# RANDOM SEED
+73
+# TETGEN SWITCHES
+pzq1.2Aa0.001f

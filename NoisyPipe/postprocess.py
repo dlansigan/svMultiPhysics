@@ -6,7 +6,7 @@ import glob
 import natsort
 from einops import rearrange
 
-def make_bbox(size=(-5.5,5.5,-1.5,1.5,-1.5,1.5), dims=(200,40,40)):
+def make_bbox(size=(-4.5,4.5,-1.5,1.5,-1.5,1.5), dims=(100,20,20)):
     # Create bounding box
     bbox = pv.Box(size)
     cell_dimensions = np.array(dims)
@@ -40,7 +40,7 @@ def get_sdf(bbox,mesh):
 
 def postproc_data(bbox,mesh,mask):
     # Interpolate results onto query points
-    data = bbox.interpolate(mesh)
+    data = bbox.sample(mesh)
 
     # Get components of velocity
     data['u'] = data['Velocity'][:,0]
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         print(case)
 
         # Assemble filepath
-        filepath = pref + '_' + str(case).zfill(4) + '/'
+        filepath = pref + '/' + pref + '_' + str(case).zfill(4) + '/'
         
         # Check if path exists
         if not os.path.exists(filepath):
@@ -101,10 +101,17 @@ if __name__ == "__main__":
 
 
         if case==case_start:
+            # # Read parameters from input file
+            # with open(filepath + 'mesh_params.in', 'r') as f:
+            #     lines = f.readlines()
+            # size = [float(x) for x in lines[28].split(' ')]
+            # print(size)
+            size = (-4.5,4.5,-1.5,1.5,-1.5,1.5)
+
             # Get bounding box
             # TODO add code for determining bbox size from mesh params
             # NOTE: move to time loop if deforming/sampling changes?
-            bbox = make_bbox()
+            bbox = make_bbox(size=size)
 
             # Normalize box
             bbox_n = normalize_coords(bbox)
@@ -126,7 +133,7 @@ if __name__ == "__main__":
         data_list = []
         coords_list = []
         for filename in vtu_files:
-            print(filename)
+            # print(filename)
 
             # Read mesh
             mesh = pv.read(filename)

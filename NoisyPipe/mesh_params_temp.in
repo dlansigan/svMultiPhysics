@@ -2,13 +2,13 @@
 Input file for generate_noisy_pipe.py.
 ==================================================
 # RADIUS - min, max radius
-0.9 1.1
+1. 1.
 # HEIGHT
 10.0
 # WALL THICKNESS
 0.2
 # NOISE: NUMBER OF MODES - number of modes for noise
-4
+0
 # NOISE: KMIN - minimum wavenumber for noise
 2
 # NOISE: KMAX - maximum wavenumber for noise
@@ -17,10 +17,10 @@ Input file for generate_noisy_pipe.py.
 -0.1
 # NOISE: AMAX - maximum amplitude for noise
 0.1
-# STENOSIS: WIDTH
-0.
-# STENOSIS: HEIGHT
-0.
+# STENOSIS: WIDTH 
+2.
+# STENOSIS: HEIGHT - absolute max/min height (2*sigma for Gaussian sampling)
+0.25
 # STENOSIS: LOCATION
 0.
 # SPLINE N_SPLINE: number of points for spline

@@ -21,19 +21,22 @@ def generate_geometry(radius, spline_bounds, t, **kwargs):
     N_spline = kwargs.get("N_spline", 5)
     N_layers = kwargs.get("N_layers", 0)
     bump_w = kwargs.get("bump_w", 0.0)
-    bump_h = kwargs.get("bump_h", 0.0)
+    bump_h_std = kwargs.get("bump_h", 0.0)
     bump_x = kwargs.get("bump_x", 0.0)
     random_seed = kwargs.get("random_seed", None)
 
     # Initialize
     contours = [] # Inner
 
-    # # x locations
-    # xpos = np.linspace(-h/2,h/2,N_base)
+    # x locations
+    xpos = np.linspace(spline_bounds[0],spline_bounds[1],N_base)
 
     # Define radius as function of x
-    # r_x = (radius - bump_h * (radius + np.cos(np.pi * ((xpos-bump_x) / bump_w))))
-    # r_x[np.abs(xpos-bump_x) > bump_w] = radius
+    bump_h = np.random.normal(0.0,bump_h_std/2)
+    print(bump_h,bump_w)
+    radius = np.random.uniform(radius[0],radius[1])
+    r_x = (radius - bump_h * (radius + np.cos(np.pi * ((xpos-bump_x) / bump_w))))
+    r_x[np.abs(xpos-bump_x) > bump_w] = radius
 
     # Angle locations
     theta = np.linspace(0, 2 * np.pi, N_theta, endpoint=False)
@@ -62,8 +65,8 @@ def generate_geometry(radius, spline_bounds, t, **kwargs):
     # Generate base contours with noise
     for i in range(N_base):
         # Get radius at this point
-        # r = r_x[i]
-        r = np.random.uniform(radius[0],radius[1])
+        r = r_x[i]
+        # r = np.random.uniform(radius[0],radius[1])
 
         # Find spline points at this location
         ii = i*N_x//N_base
@@ -348,7 +351,12 @@ def mesh_geometry(geo,region_points,switches='pzq1.2Aa0.1f'):
     #     tet.add_region(marker, pt)#, max_vol=max_vol)
 
     # Tetrahedralize with quality and volume constraints 
-    _, _, attrib = tet.tetrahedralize(switches=switches,verbose=True)
+    try:
+        _, _, attrib = tet.tetrahedralize(switches=switches,verbose=True)
+        print('Meshing successful.')
+    except Exception as e:
+        print('An error occured in meshing.')
+        return None, None
 
     # Assign global IDs
     mesh = tet.grid
